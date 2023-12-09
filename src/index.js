@@ -3,14 +3,19 @@ import cors from "cors"
 import mongoose from "mongoose"
 
 import { userRouter } from './routes/users.js'
+import { recipeRouter } from './routes/recipes.js'
 
 const app = express()
 
 //middlwares 
 app.use(express.json()); 
-app.use(cors());
+app.use(cors()); 
 
+app.get("/", (req, res) => {
+  res.send("Api Working");
+});
 app.use("/auth", userRouter); 
+app.use("/recipes", recipeRouter);
 
 
 
