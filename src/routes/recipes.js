@@ -1,123 +1,98 @@
-import express from 'express'
-import mongoose from 'mongoose';
-import { RecipeModel } from "../models/Recipes.js";
-import { UserModel } from '../models/Users.js';
+import express from "express";
+import mongoose from "mongoose";
+import { RecipesModel } from "../models/Recipes.js";
+import { UserModel } from "../models/Users.js";
+import  verifyToken  from "../routes/verifyToken.js";
 
 const router = express.Router();
 
-//to post new recipe
-router.post("/", async (req, res) => {
-    const recipe = new RecipeModel(req.body);
-    try {
-        const response = await recipe.save();
-        // console.log(response)
-        res.json({ message: "success" });
-    } catch (error) {
-        console.log("error", error)
-        return res.json({ message: "error aa gya" });
-    }
-});
-
-//to get all the recipe
 router.get("/", async (req, res) => {
-    try {
-        const response = await RecipeModel.find({})
-        res.json(response);
-    } catch (error) {
-        res.json(error);
-    }
-})
-
-//get perticular recipe
-router.get("/:id", async (req, res) => {
-    try {
-        const response = await RecipeModel.findById(req.params.id);
-        res.json(response);
-    } catch (error) {
-        return res.json(error);
-    }
+  try {
+    const result = await RecipesModel.find({});
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
-// update the saved recipe
-router.put("/:userId", async (req, res) => {
-    try {
-        const id = req.params.userId;
-        console.log(req.body)
-        const recipe = await RecipeModel.findById(req.body.recipeID);
-        const user = await UserModel.findByIdAndUpdate(id, { $push: { savedRecipe: recipe } }, { new: true });
+// Create a new recipe
+router.post("/", async (req, res) => {
+  const recipe = new RecipesModel({
+    _id: new mongoose.Types.ObjectId(),
+    name: req.body.name,
+    image: req.body.image,
+    ingredients: req.body.ingredients,
+    instructions: req.body.instructions,
+    imageUrl: req.body.imageUrl,
+    cookingTime: req.body.cookingTime,
+    userOwner: req.body.userOwner,
+  });
 
-        res.json(user);
-    } catch (error) {
-        return res.json(error);
-    }
+  try {
+    const result = await recipe.save();
+    res.status(201).json({
+      createdRecipe: {
+        name: result.name,
+        image: result.image,
+        ingredients: result.ingredients,
+        instructions: result.instructions,
+        _id: result._id,
+      },
+    });
+  } catch (err) {
+    // console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+// Save a Recipe
+router.put("/", verifyToken, async (req, res) => {
+  const recipe = await RecipesModel.findById(req.body.recipeID);
+  const user = await UserModel.findById(req.body.userID);
+  try {
+    user.savedRecipe.push(recipe);
+    await user.save();
+    res.status(201).json({ savedRecipe: user.savedRecipe });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+// Get a recipe by ID
+router.get("/:recipeId", async (req, res) => {
+  try {
+    const result = await RecipesModel.findById(req.params.recipeId);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 
-// router.get("/savedRecipe/:userID", async (req, res) => {
-//     try {
-//         const user = await UserModel.findById(req.params.userID);
-//         const savedRecipe = await RecipeModel.find({
-//             _id: { $in: user.savedRecipe },
-//         });
-//         res.json(savedRecipe);
-//     } catch (error) {
-//         res.json(error);
-//     }
-// });
-// router.get("/savedRecipe/ids/:userID", async (req, res) => {
-//     try {
-//         const user = await UserModel.findById(req.params.userID);
-//         res.json({ savedRecipe: user?.savedRecipe });
-//     } catch (error) {
-//         res.json(error);
-//     }
-// })
-// // to update the particulat recipe
-// router.put("/:userId", async (req, res) => {
-//     try {
-//         const id = req.params.userId;
-//         const recipe = await RecipeModel.findById(req.body.recipeID);
-//         const user = await UserModel.findByIdAndUpdate(id, { $push: { savedRecipe: recipe } }, { new: true });
+// Get id of saved recipes
+router.get("/savedRecipes/ids/:userId", async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.userId);
+    res.status(201).json({ savedRecipe: user?.savedRecipe });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
 
-//         res.json(user);
-//     } catch (error) {
-//         return res.json(error);
-//     }
-// });
-// // router.put("/", async (req, res) => {
-// //     try {
-// //         const recipe = await RecipeModel.findById(req.body.recipeID);
-// //         const user = await UserModel.findById(req.body.userID);
-// //         user.savedRecipes.push(recipe);
-// //         await user.save();
-// //         res.json({ savedRecipes: user.savedRecipes });
-// //     } catch (error) {
-// //         res.json(error);
-// //     }
-// // })
+// Get saved recipes
+router.get("/savedRecipes/:userId", async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.userId);
+    const savedRecipes = await RecipesModel.find({
+      _id: { $in: user.savedRecipe },
+    });
 
-// router.get("/savedRecipes/ids", async (req, res) => {
-//     try {
-//         const user = await UserModel.findById(req.body.userID);
-//         res.json({ savedRecipes: user?.savedRecipes });
-//     }
-//     catch (error) {
-//         res.json(error);
-//     }
-// })
+    console.log(savedRecipes);
+    res.status(201).json({ savedRecipes });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
 
-
-// router.get("/savedRecipes/ids", async (req, res) => {
-//     try {
-//         const user = await UserModel.findById(req.body.userID);
-//         const savedRecipes = await RecipeModel.find({
-//             _id: { $in: user.savedRecipes },
-//         });
-//         res.json({ savedRecipes });
-//     }
-//     catch (error) {
-//         res.json(error);
-//     }
-// })
-export { router as recipeRouter }
-
+export { router as recipesRouter };

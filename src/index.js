@@ -3,7 +3,7 @@ import cors from "cors"
 import mongoose from "mongoose"
 
 import { userRouter } from './routes/users.js'
-import { recipeRouter } from './routes/recipes.js'
+import { recipesRouter } from './routes/recipes.js'
 
 const app = express()
 
@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
   res.send("Api Working");
 });
 app.use("/auth", userRouter); 
-app.use("/recipes", recipeRouter);
+app.use("/recipes", recipesRouter);
 
 
 

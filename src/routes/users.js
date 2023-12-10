@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { UserModel } from "../models/Users.js";
 
+
 const router = express.Router()
 
 router.post("/register", async (req, res) => {
@@ -39,7 +40,9 @@ router.post("/login", async (req, res)=> {
         return res.json({message: "User or password is incorrect "});
     }
     const token = jwt.sign({ id: user._id}, "secret");
+    console.log(token)
     res.json({token, userID: user._id });
 }); 
 
 export { router as userRouter } 
+
