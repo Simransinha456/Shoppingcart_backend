@@ -95,4 +95,16 @@ router.get("/savedRecipes/:userId", async (req, res) => {
   }
 });
 
+router.put("/remove/:userId/:recipeId" , async (req, res)=>{
+  try {
+    const id = req.params.userId;
+    const recipeid = req.params.recipeId;
+    const updatedUser = await UserModel.findByIdAndUpdate(id,{ $pull: { savedRecipe: recipeid } },{ new: true }); 
+    res.json(updatedUser);
+    
+  } catch (error) {
+    return res.json(error);
+  }
+})
+
 export { router as recipesRouter };
