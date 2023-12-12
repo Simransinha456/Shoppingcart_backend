@@ -87,7 +87,6 @@ router.get("/savedRecipes/:userId", async (req, res) => {
       _id: { $in: user.savedRecipe },
     });
 
-    console.log(savedRecipes);
     res.status(201).json({ savedRecipes });
   } catch (err) {
     console.log(err);
