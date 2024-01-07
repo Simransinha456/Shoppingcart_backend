@@ -19,7 +19,6 @@ app.use("/recipes", recipesRouter);
 
 
 
-// mongoose.connect("mongodb+srv://simransinha:MERNpassword@recipes.xrnkcsc.mongodb.net/recipes?retryWrites=true&w=majority");
 const connect = async () => {
     try {
       await mongoose.connect("mongodb+srv://simransinha:MERNpassword@recipes.xrnkcsc.mongodb.net/recipes?retryWrites=true&w=majority");
