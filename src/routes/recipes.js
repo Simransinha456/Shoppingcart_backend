@@ -6,7 +6,7 @@ import  verifyToken  from "../routes/verifyToken.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/more", async (req, res) => {
   try {
     const result = await RecipesModel.find({});
     res.status(200).json(result);
