@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { RecipesModel } from "../models/Recipes.js";
 import { UserModel } from "../models/Users.js";
-import  verifyToken  from "../routes/verifyToken.js";
+import verifyToken from "../routes/verifyToken.js";
 
 const router = express.Router();
 
@@ -94,13 +94,13 @@ router.get("/savedRecipes/:userId", async (req, res) => {
   }
 });
 
-router.put("/remove/:userId/:recipeId" , async (req, res)=>{
+router.put("/remove/:userId/:recipeId", async (req, res) => {
   try {
     const id = req.params.userId;
     const recipeid = req.params.recipeId;
-    const updatedUser = await UserModel.findByIdAndUpdate(id,{ $pull: { savedRecipe: recipeid } },{ new: true }); 
+    const updatedUser = await UserModel.findByIdAndUpdate(id, { $pull: { savedRecipe: recipeid } }, { new: true });
     res.json(updatedUser);
-    
+
   } catch (error) {
     return res.json(error);
   }

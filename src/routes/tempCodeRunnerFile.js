@@ -15,18 +15,18 @@ router.post("/register", async (req, res) => {
         return res.json({ message: "User already exists" });
     }
     //hashing the password
-    const hashedPassword = await bcrypt.hash(password, 10) 
+    const hashedPassword = await bcrypt.hash(password, 10)
 
-    const newUser = new UserModel({username, password: hashedPassword});
+    const newUser = new UserModel({ username, password: hashedPassword });
     await newUser.save();
-    res.json({message: "User successfully registered"}); 
+    res.json({ message: "User successfully registered" });
 });
-  
+
 
 //routing of login------------
-router.post("/login", async (req, res)=> {
-    const { username, password }= req.body;
-    const user = await UserModel.findOne({ username});
+router.post("/login", async (req, res) => {
+    const { username, password } = req.body;
+    const user = await UserModel.findOne({ username });
 
 });
 

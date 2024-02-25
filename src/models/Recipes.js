@@ -15,14 +15,14 @@ const RecipeSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        required:true
+        required: true
     },
     cookingTime: {
         type: String,
-        required:true
+        required: true
     },
     userOwner: {
-        type: mongoose.Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId,
         ref: "users", required: true,
     },
 });
