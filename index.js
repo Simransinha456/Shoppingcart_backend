@@ -1,32 +1,37 @@
 import express from "express"
 import cors from "cors"
 import mongoose from "mongoose"
+import dotenv from "dotenv"
+
 
 import { userRouter } from './src/routes/users.js'
 import { recipesRouter } from './src/routes/recipes.js'
 
-const app = express()
+dotenv.config();
+const app = express();
 
 //middlwares 
 app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Api Working");
+  res.send("Backend Api Working");
 });
+
 app.use("/auth", userRouter);
 app.use("/recipes", recipesRouter);
 
 
 const connect = async () => {
   try {
-    await mongoose.connect("mongodb+srv://simransinha:MERNpassword@recipes.xrnkcsc.mongodb.net/recipes?retryWrites=true&w=majority");
+    await mongoose.connect(process.env.MongoURL);
     console.log("Connected To MongoDB.");
   } catch (error) {
     throw error;
   }
 };
 connect();
+
 
 app.listen(8000, () => {
   console.log("SERVER STARTED")
