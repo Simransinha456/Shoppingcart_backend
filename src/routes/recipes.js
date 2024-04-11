@@ -22,9 +22,7 @@ router.post("/", async (req, res) => {
     name: req.body.name,
     image: req.body.image,
     ingredients: req.body.ingredients,
-    instructions: req.body.instructions,
     imageUrl: req.body.imageUrl,
-    cookingTime: req.body.cookingTime,
     userOwner: req.body.userOwner,
   });
 
@@ -34,7 +32,7 @@ router.post("/", async (req, res) => {
       createdRecipe: {
         name: result.name,
         image: result.image,
-        ingredients: result.ingredients,
+        ingredients: result.ingredients, 
         instructions: result.instructions,
         _id: result._id,
       },
@@ -57,6 +55,7 @@ router.put("/", verifyToken, async (req, res) => {
     res.status(500).json(err);
   }
 });
+
 // Get a recipe by ID
 router.get("/:recipeId", async (req, res) => {
   try {
@@ -66,7 +65,6 @@ router.get("/:recipeId", async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 
 // Get id of saved recipes
 router.get("/savedRecipes/ids/:userId", async (req, res) => {

@@ -3,9 +3,9 @@ import cors from "cors"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 
-
 import { userRouter } from './src/routes/users.js'
 import { recipesRouter } from './src/routes/recipes.js'
+import { orderRouter } from "./src/routes/orders.js"
 
 dotenv.config();
 const app = express();
@@ -20,6 +20,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", userRouter);
 app.use("/recipes", recipesRouter);
+app.use("/orders", orderRouter);
 
 
 const connect = async () => {

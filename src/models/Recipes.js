@@ -1,5 +1,4 @@
 import mongoose from "mongoose"
-
 const RecipeSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -9,15 +8,7 @@ const RecipeSchema = new mongoose.Schema({
         type: String,
         required: true
     }],
-    instructions: {
-        type: String,
-        required: true
-    },
     imageUrl: {
-        type: String,
-        required: true
-    },
-    cookingTime: {
         type: String,
         required: true
     },
@@ -27,4 +18,4 @@ const RecipeSchema = new mongoose.Schema({
     },
 });
 
-export const RecipesModel = mongoose.model("recipes", RecipeSchema); 
+export const RecipesModel = mongoose.model("recipe", RecipeSchema); 
