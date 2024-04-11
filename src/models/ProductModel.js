@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-const RecipeSchema = new mongoose.Schema({
+const ProductSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -18,4 +18,4 @@ const RecipeSchema = new mongoose.Schema({
     },
 });
 
-export const RecipesModel = mongoose.model("recipe", RecipeSchema); 
+export const ProductsModel = mongoose.model("recipe", ProductSchema); 

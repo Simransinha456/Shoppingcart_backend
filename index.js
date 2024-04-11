@@ -4,7 +4,7 @@ import mongoose from "mongoose"
 import dotenv from "dotenv"
 
 import { userRouter } from './src/routes/users.js'
-import { recipesRouter } from './src/routes/recipes.js'
+import { productsrouter } from './src/routes/products.js'
 import { orderRouter } from "./src/routes/orders.js"
 
 dotenv.config();
@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", userRouter);
-app.use("/recipes", recipesRouter);
+app.use("/recipes", productsrouter);
 app.use("/orders", orderRouter);
 
 

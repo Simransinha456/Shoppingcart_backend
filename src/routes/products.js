@@ -1,14 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
-import { RecipesModel } from "../models/Recipes.js";
+import { ProductsModel } from "../models/ProductModel.js";
 import { UserModel } from "../models/Users.js";
-import verifyToken from "../routes/verifyToken.js";
+import verifyToken from "./verifyToken.js";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const result = await RecipesModel.find({});
+    const result = await ProductsModel.find({});
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json(err);
@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 
 // Create a new recipe
 router.post("/", async (req, res) => {
-  const recipe = new RecipesModel({
+  const recipe = new ProductsModel({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     image: req.body.image,
@@ -45,7 +45,7 @@ router.post("/", async (req, res) => {
 
 // Save a Recipe
 router.put("/", verifyToken, async (req, res) => {
-  const recipe = await RecipesModel.findById(req.body.recipeID);
+  const recipe = await ProductsModel.findById(req.body.recipeID);
   const user = await UserModel.findById(req.body.userID);
   try {
     user.savedRecipe.push(recipe);
@@ -59,7 +59,7 @@ router.put("/", verifyToken, async (req, res) => {
 // Get a recipe by ID
 router.get("/:recipeId", async (req, res) => {
   try {
-    const result = await RecipesModel.findById(req.params.recipeId);
+    const result = await ProductsModel.findById(req.params.recipeId);
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json(err);
@@ -81,7 +81,7 @@ router.get("/savedRecipes/ids/:userId", async (req, res) => {
 router.get("/savedRecipes/:userId", async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userId);
-    const savedRecipes = await RecipesModel.find({
+    const savedRecipes = await ProductsModel.find({
       _id: { $in: user.savedRecipe },
     });
 
@@ -104,4 +104,4 @@ router.put("/remove/:userId/:recipeId", async (req, res) => {
   }
 })
 
-export { router as recipesRouter };
+export { router as productsrouter };
